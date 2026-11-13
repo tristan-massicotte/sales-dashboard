@@ -7,14 +7,14 @@
 
 import { addDays, daysBetween, monthEnd, toDay, toIso, todayIso, weekday } from "./dates";
 
-export type CompanyCode = "CAN" | "SYS" | "INC";
+export type CompanyCode = "CAN" | "IND" | "INC";
 export type Currency = "CAD" | "USD";
 export type Company = { code: CompanyCode; name: string; short: string; currency: Currency };
 
 // Two companies in CAD, one in USD: USD and CAD are never added together anywhere in the app.
 export const COMPANIES: Company[] = [
   { code: "CAN", name: "Halden Canada", short: "Canada", currency: "CAD" },
-  { code: "SYS", name: "Halden Systems", short: "Systems", currency: "CAD" },
+  { code: "IND", name: "Halden Industrial", short: "Industrial", currency: "CAD" },
   { code: "INC", name: "Halden Inc.", short: "Inc.", currency: "USD" },
 ];
 export const companyOf = (code: string) => COMPANIES.find((c) => c.code === code)!;
@@ -75,7 +75,7 @@ export const UNASSIGNED = "Unassigned";
 
 const PEOPLE: Record<CompanyCode, [string, number][]> = {
   CAN: [["Sophie Tremblay", 24], ["Marc Bélanger", 18], ["Daniel Okafor", 14], ["Priya Raman", 12], ["Kevin MacLeod", 9], ["Laura Chen", 8], ["Partners Desk", 5]],
-  SYS: [["Julie Fortin", 40], ["Daniel Okafor", 25], ["Laura Chen", 20]],
+  IND: [["Julie Fortin", 40], ["Daniel Okafor", 25], ["Laura Chen", 20]],
   INC: [["Jason Miller", 26], ["Ana Torres", 22], ["Ryan Brooks", 16], ["Megan Walsh", 14], ["Laura Chen", 10], ["Distribution South", 6]],
 };
 
@@ -106,7 +106,7 @@ const PLACES = ["Riverside", "Northgate", "Summit Ridge", "Bayview", "Cedar Poin
   "Marigold", "Newhaven", "Oakmont", "Peregrine", "Quillon", "Ravenwood", "Shoreline", "Tamarack", "Ulmus", "Valemont"];
 const KINDS: Record<CompanyCode, string[]> = {
   CAN: ["Fleet Services", "Industrial Supply", "Equipment Ltd.", "Logistics", "Fabrication", "Transit Authority", "Utilities", "Rentals"],
-  SYS: ["Automation", "Controls Ltd.", "Machine Works", "Robotics", "Packaging", "Systems Integration"],
+  IND: ["Automation", "Controls Ltd.", "Machine Works", "Robotics", "Packaging", "Systems Integration"],
   INC: ["Fleet Solutions", "Industrial Group", "Equipment Co.", "Logistics Inc.", "Supply Corp.", "Machinery Co.", "Services Group", "Municipal Fleet"],
 };
 const PARTNERSHIP = ["OEM", "Distributor", "End user", "Government", ""];
@@ -186,8 +186,8 @@ function customers(): Customer[] {
   const rng = new Rng("customers");
   const used = new Set<string>();
   const out: Customer[] = [];
-  const counts: Record<CompanyCode, number> = { CAN: 82, SYS: 36, INC: 100 };
-  for (const company of ["CAN", "SYS", "INC"] as CompanyCode[]) {
+  const counts: Record<CompanyCode, number> = { CAN: 82, IND: 36, INC: 100 };
+  for (const company of ["CAN", "IND", "INC"] as CompanyCode[]) {
     for (let i = 0; i < counts[company]; i++) {
       let name = "";
       do name = `${rng.pick(PLACES)} ${rng.pick(KINDS[company])}`; while (used.has(name));
@@ -195,7 +195,7 @@ function customers(): Customer[] {
       const where = rng.next();
       const region = company === "INC"
         ? (where < 0.78 ? rng.weighted(STATES) : where < 0.95 ? rng.weighted(WORLD) : rng.weighted(CANADA))
-        : company === "SYS"
+        : company === "IND"
           ? (where < 0.86 ? rng.weighted(CANADA) : where < 0.9 ? rng.weighted(BORDER) : rng.weighted(WORLD))
           : (where < 0.8 ? rng.weighted(CANADA) : where < 0.85 ? rng.weighted(BORDER) : rng.weighted(WORLD));
       out.push({
@@ -219,11 +219,11 @@ function customers(): Customer[] {
 
 // Fixed first month: documents are numbered from it, so a past month never changes as days pass.
 const EPOCH = { year: 2024, month: 7 }; // July 2024
-const VOLUME: Record<CompanyCode, number> = { CAN: 62, SYS: 18, INC: 48 }; // invoices per month, before season/growth
-const MEDIAN: Record<CompanyCode, number> = { CAN: 24000, SYS: 17000, INC: 31000 }; // invoice size, company currency
+const VOLUME: Record<CompanyCode, number> = { CAN: 62, IND: 18, INC: 48 }; // invoices per month, before season/growth
+const MEDIAN: Record<CompanyCode, number> = { CAN: 24000, IND: 17000, INC: 31000 }; // invoice size, company currency
 const SEASON = [0.78, 0.92, 1.08, 1.1, 1.12, 1.04, 0.84, 0.9, 1.08, 1.14, 1.1, 0.86]; // Jan … Dec
-const PREFIX: Record<CompanyCode, string> = { CAN: "INV-C", SYS: "INV-S", INC: "INV-U" };
-const CN_PREFIX: Record<CompanyCode, string> = { CAN: "CN-C", SYS: "CN-S", INC: "CN-U" };
+const PREFIX: Record<CompanyCode, string> = { CAN: "INV-C", IND: "INV-I", INC: "INV-U" };
+const CN_PREFIX: Record<CompanyCode, string> = { CAN: "CN-C", IND: "CN-I", INC: "CN-U" };
 
 const cents = (dollars: number) => Math.round(dollars * 100);
 
@@ -248,7 +248,7 @@ export function generate(today: string = todayIso()): Dataset {
   const invoices: Invoice[] = [];
   const creditNotes: CreditNote[] = [];
   const applications: Application[] = [];
-  const counters: Record<string, number> = { CAN: 10840, SYS: 2310, INC: 6120, "cn-CAN": 920, "cn-SYS": 180, "cn-INC": 610 };
+  const counters: Record<string, number> = { CAN: 10840, IND: 2310, INC: 6120, "cn-CAN": 920, "cn-IND": 180, "cn-INC": 610 };
   const firstMonth = new Date(Date.UTC(EPOCH.year, EPOCH.month - 1, 1));
   const monthsToToday = (Number(today.slice(0, 4)) - EPOCH.year) * 12 + Number(today.slice(5, 7)) - EPOCH.month;
   // Random draw per invoice for its payment, kept so the status only depends on "today".
@@ -259,7 +259,7 @@ export function generate(today: string = todayIso()): Dataset {
     const last = monthEnd(first);
     const month = Number(first.slice(5, 7)) - 1;
     const years = Math.min(m / 12, 4); // growth since the start of the data
-    for (const company of ["CAN", "SYS", "INC"] as CompanyCode[]) {
+    for (const company of ["CAN", "IND", "INC"] as CompanyCode[]) {
       const rng = new Rng(company, first);
       const list = byCompany(company);
       const weights = list.map((c) => [c, c.weight] as [Customer, number]);
@@ -305,7 +305,7 @@ export function generate(today: string = todayIso()): Dataset {
       const goodwill = cnRng.int(0, 2);
       const events: { inv: Invoice | null; date: string; frac: number }[] = [];
       for (const inv of toCredit) {
-        if (!cnRng.chance(company === "SYS" ? 0.04 : 0.065)) continue;
+        if (!cnRng.chance(company === "IND" ? 0.04 : 0.065)) continue;
         const frac = cnRng.chance(0.3) ? 1 : 0.05 + cnRng.next() * 0.45;
         events.push({ inv, date: addDays(inv.date, cnRng.int(3, 45)), frac });
       }

@@ -13,7 +13,7 @@ const PERIODS: { value: Period; label: string }[] = [
 const COMPANIES: { value: Filters["company"]; label: string }[] = [
   { value: "", label: "All" },
   { value: "CAN", label: "Canada" },
-  { value: "SYS", label: "Systems" },
+  { value: "IND", label: "Industrial" },
   { value: "INC", label: "Inc." },
 ];
 

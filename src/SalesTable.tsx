@@ -2,7 +2,7 @@ import { Fragment, ReactNode, useState } from "react";
 import { PersonRow, Report, Totals } from "./api";
 import { amount, currencyLabel, money, pct } from "./format";
 
-// One table per currency (CAD: Canada + Systems; USD: Inc.), because USD and CAD are never added together.
+// One table per currency (CAD: Canada + Industrial; USD: Inc.), because USD and CAD are never added together.
 // Someone selling in both currencies appears in both tables, each with their own total.
 // Compare: the two periods side by side, each person on the same line in both halves (an empty line where
 // they had nothing), and the change of the net on the second period's side.

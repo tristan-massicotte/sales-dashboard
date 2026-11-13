@@ -43,7 +43,7 @@ describe("demo data", () => {
 
 describe("engine", () => {
   for (const [start, end] of PERIODS) {
-    for (const company of ["", "CAN", "SYS", "INC"] as const) {
+    for (const company of ["", "CAN", "IND", "INC"] as const) {
       for (const tax of [false, true]) {
         for (const setAside of [false, true]) {
           it(`adds up: ${start}..${end} ${company || "all"} tax=${tax} setAside=${setAside}`, () => {
