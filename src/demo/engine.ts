@@ -9,7 +9,7 @@
 //   with a region filter).
 // - Before taxes (default) = total − tax, for invoices and credit notes; applied parts are reduced in
 //   proportion (credit note total − tax) ÷ total.
-// - Every amount is in its company's currency (Canada, Medical: CAD; Inc.: USD), converted with the document's
+// - Every amount is in its company's currency (Canada, Systems: CAD; Inc.: USD), converted with the document's
 //   own exchange rate. No outside rate and no total across currencies.
 // - "Accounting Office" (set aside): never under a salesperson; in company totals and the map only when
 //   countSetAside is on.

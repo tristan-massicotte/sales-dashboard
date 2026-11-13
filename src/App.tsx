@@ -24,7 +24,7 @@ function readUrl(): Filters {
     period: (["30", "90", "365", "custom"].includes(period ?? "") ? period : DEFAULTS.period) as Period,
     start: q.get("start") ?? "",
     end: q.get("end") ?? "",
-    company: (["CAN", "MED", "INC"].includes(company ?? "") ? company : "") as CompanyFilter,
+    company: (["CAN", "SYS", "INC"].includes(company ?? "") ? company : "") as CompanyFilter,
     tax: q.get("tax") === "true",
     setAside: true, // accounting entries always count in the company totals
     region: q.get("region") ?? "",
@@ -206,7 +206,7 @@ export function App() {
       </main>
       <footer className="footer">
         <p>
-          <strong>Demo.</strong> Halden Canada, Halden Medical and Halden Inc. are fictional; every customer, salesperson and
+          <strong>Demo.</strong> Halden Canada, Halden Systems and Halden Inc. are fictional; every customer, salesperson and
           amount is generated in your browser. The production version of this dashboard runs on real ERP data.
         </p>
         <p>

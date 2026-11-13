@@ -5,7 +5,7 @@
 import * as server from "./demo/server";
 
 export type Period = "30" | "90" | "365" | "custom";
-export type CompanyFilter = "" | "CAN" | "MED" | "INC"; // "" = all three
+export type CompanyFilter = "" | "CAN" | "SYS" | "INC"; // "" = all three
 
 export type Filters = {
   period: Period;

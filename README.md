@@ -5,7 +5,7 @@
 A public demo of a sales dashboard I built at work for a manufacturer with three companies and two currencies
 (two companies bill in CAD, one in USD). The production version runs on the company's real invoices and is in
 daily use. This version runs the same calculation rules in your browser on generated data: the companies
-("Halden Canada", "Halden Medical", "Halden Inc."), customers, salespeople and amounts are all fictional.
+("Halden Canada", "Halden Systems", "Halden Inc."), customers, salespeople and amounts are all fictional.
 
 ## What it does
 

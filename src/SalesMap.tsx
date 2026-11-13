@@ -5,7 +5,7 @@ import { FxAverage, RegionNet } from "./api";
 import { currencyLabel, day, money, pct } from "./format";
 
 // Heat map of SALES by province/state (shipping address, else billing). Both currencies at once, never added:
-// CAD (Canada + Medical) in blue, USD (Inc.) in red, each on its own scale. A region with both is coloured in its
+// CAD (Canada + Systems) in blue, USD (Inc.) in red, each on its own scale. A region with both is coloured in its
 // own country's currency; the tooltip and the list show both. Outside Canada and the US, by country ("W-ES") in
 // green. Globe projection; the first time per session it flies to North America (~1 s, skippable with a click or
 // a key). Boundaries: Natural Earth (public domain), bundled in public/geo.
@@ -323,7 +323,7 @@ export function SalesMap({ regions, fx, selected, onSelect }: Props) {
         <h2>Sales by region</h2>
         <div className="legend" aria-hidden="true">
           {values.present.map((cur) => (
-            <LegendRow key={cur} title={cur === "CAD" ? "Canada + Medical" : "Inc."} currency={cur} scale={cur}
+            <LegendRow key={cur} title={cur === "CAD" ? "Canada + Systems" : "Inc."} currency={cur} scale={cur}
               max={values.max[cur]} theme={theme} />
           ))}
           {values.worldPresent.map((cur) => (
@@ -344,7 +344,7 @@ export function SalesMap({ regions, fx, selected, onSelect }: Props) {
       <h2>Sales breakdown</h2>
       <div className="breakdown-cols">
         {values.present.map((cur) => (
-          <RegionList key={cur} title={cur === "CAD" ? "Canada + Medical" : "Inc."} subtitle={currencyLabel(cur)} scale={cur}
+          <RegionList key={cur} title={cur === "CAD" ? "Canada + Systems" : "Inc."} subtitle={currencyLabel(cur)} scale={cur}
             selected={selected} onSelect={onSelect} approx={!!fx}
             rows={regions.filter((r) => r.code !== UNKNOWN && !isWorld(r.code) && (r.sales[cur] ?? 0) !== 0)
               .map((r) => ({ code: r.code, label: r.label, value: r.sales[cur], currency: cur, share: shareOf(r, cur) }))} />
