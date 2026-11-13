@@ -1,0 +1,35 @@
+// Region codes → English names. "CA-QC" province, "US-TX" state, "W-ES" another country (by country).
+
+export const UNKNOWN_REGION = "unknown";
+
+const PROVINCES: Record<string, string> = {
+  AB: "Alberta", BC: "British Columbia", MB: "Manitoba", NB: "New Brunswick", NL: "Newfoundland and Labrador",
+  NS: "Nova Scotia", NT: "Northwest Territories", NU: "Nunavut", ON: "Ontario", PE: "Prince Edward Island",
+  QC: "Quebec", SK: "Saskatchewan", YT: "Yukon",
+};
+
+const STATES: Record<string, string> = {
+  AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California", CO: "Colorado", CT: "Connecticut",
+  DE: "Delaware", DC: "District of Columbia", FL: "Florida", GA: "Georgia", HI: "Hawaii", ID: "Idaho", IL: "Illinois",
+  IN: "Indiana", IA: "Iowa", KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland",
+  MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi", MO: "Missouri", MT: "Montana",
+  NE: "Nebraska", NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey", NM: "New Mexico", NY: "New York",
+  NC: "North Carolina", ND: "North Dakota", OH: "Ohio", OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania",
+  RI: "Rhode Island", SC: "South Carolina", SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah",
+  VT: "Vermont", VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming",
+};
+
+const countries = new Intl.DisplayNames(["en"], { type: "region" });
+
+export function label(region: string | null): string {
+  if (!region || region === UNKNOWN_REGION) return "Unknown region";
+  const [country, code] = region.split("-");
+  if (country === "W") return countries.of(code) ?? code;
+  return (country === "CA" ? PROVINCES : STATES)[code] ?? region;
+}
+
+export function isKnown(region: string): boolean {
+  if (region === UNKNOWN_REGION) return true;
+  const [country, code] = region.split("-");
+  return country === "W" ? /^[A-Z]{2}$/.test(code ?? "") : !!(country === "CA" ? PROVINCES : STATES)[code];
+}
