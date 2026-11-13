@@ -79,4 +79,5 @@ Map boundaries: [Natural Earth](https://www.naturalearthdata.com/) (public domai
 ---
 
 Built by Tristan Massicotte · Industrial Engineering, University of Toronto ·
-[LinkedIn](https://www.linkedin.com/in/tristan-massicotte)
+[LinkedIn](https://www.linkedin.com/in/tristan-massicotte) ·
+[Manufacturing Dashboard demo](https://github.com/tristan-massicotte/manufacturing-dashboard) (same companies)

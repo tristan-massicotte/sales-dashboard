@@ -211,6 +211,7 @@ export function App() {
         </p>
         <p>
           Built by Tristan Massicotte · <a href={REPO} target="_blank" rel="noreferrer">Source and write-up on GitHub ↗</a>
+          {" · "}<a href="https://tristan-massicotte.github.io/manufacturing-dashboard/" target="_blank" rel="noreferrer">Manufacturing Dashboard demo ↗</a>
         </p>
       </footer>
       {person && report && (person.side === 1 || report2) && (
