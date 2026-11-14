@@ -32,8 +32,31 @@ type Props = {
   dataAsOf: string | null;
 };
 
+const TABS_SEEN_KEY = "tabs-seen";
+
+function readTabsSeen(): boolean {
+  try {
+    return localStorage.getItem(TABS_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export function Header({ filters, onChange, page, onPage, regionLabel, dataAsOf }: Props) {
   const set = (patch: Partial<Filters>) => onChange({ ...filters, ...patch });
+  // Map and KPI pulse until the visitor has opened one of them once.
+  const [tabsSeen, setTabsSeen] = useState(readTabsSeen);
+  const openPage = (p: Page) => {
+    if (p !== "sales" && !tabsSeen) {
+      setTabsSeen(true);
+      try {
+        localStorage.setItem(TABS_SEEN_KEY, "1");
+      } catch {
+        // private window: the hint comes back on the next visit
+      }
+    }
+    onPage(p);
+  };
 
   return (
     <header className="header">
@@ -43,13 +66,14 @@ export function Header({ filters, onChange, page, onPage, regionLabel, dataAsOf 
           <nav className="tabs" aria-label="Pages">
             <h1>
               <button type="button" className={page === "sales" ? "on" : ""}
-                aria-current={page === "sales" ? "page" : undefined} onClick={() => onPage("sales")}>
+                aria-current={page === "sales" ? "page" : undefined} onClick={() => openPage("sales")}>
                 Sales Dashboard
               </button>
             </h1>
             {PAGES.map((p) => (
-              <button key={p.value} type="button" className={page === p.value ? "on" : ""}
-                aria-current={page === p.value ? "page" : undefined} onClick={() => onPage(p.value)}>
+              <button key={p.value} type="button"
+                className={page === p.value ? "on" : !tabsSeen && page === "sales" ? "hint" : ""}
+                aria-current={page === p.value ? "page" : undefined} onClick={() => openPage(p.value)}>
                 {p.label}
               </button>
             ))}

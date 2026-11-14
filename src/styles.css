@@ -88,6 +88,24 @@ button { font: inherit; color: inherit; }
 }
 .tabs button:hover { color: var(--accent); }
 .tabs button.on { font-size: 20px; font-weight: 700; color: var(--text); cursor: default; }
+/* Until the visitor opens another page, Map and KPI pulse so it's clear they can be clicked. */
+.tabs button.hint {
+  padding: 0 10px; border-radius: 999px; color: var(--accent);
+  font-weight: 600; animation: tab-hint 1.4s ease-in-out infinite;
+}
+@keyframes tab-hint {
+  0%, 100% {
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+  50% {
+    background: var(--accent); color: var(--on-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tabs button.hint { animation: none; background: color-mix(in srgb, var(--accent) 14%, transparent); }
+}
 .logo { width: 40px; height: 40px; border-radius: 8px; }
 .refresh { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; margin-top: 2px; }
 .subtitle { color: var(--muted); font-size: 13px; }
